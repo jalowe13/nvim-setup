@@ -41,15 +41,20 @@ if ($dockerContainerOsType -eq "windows") {
   Enable-WindowsOptionalFeature -Online -FeatureName Containers -All
   & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchDaemon
 }
-
-# Build and run the Docker container for Neovim
-docker build -t neovim -f Dockerfile .
-
-docker rm -f neovimcontainer 
-docker run --name neovimcontainer -d neovim
-docker exec -it neovimcontainer powershell
-# Install all dependencies through Docker
-# Setup process for LazyVim/Neovim
+# Build Dockerfile and run Docker container for Neovim and add GIT
+$imageExists = docker images | Where-Object { $_ -match "neovim" }
+if (-not $imageExists) {
+  Write-Host "Neovim image does not exist. Building image."
+  # Build and run the Docker container for Neovim
+  docker build -t neovim -f Dockerfile .
+  docker rm -f neovimcontainer 
+  docker run --name neovimcontainer -d neovim
+}
+# Setup process for LazyVim/Neovim through powershell in Docker
+# Hello world would be the first thing to do in the container but represents the setup process
+docker exec -it neovimcontainer powershell -Command { 
+  echo 'HELLO WORLD'; powershell # Says hello world then creates a new instance of powershell in this container 
+  }
 
 
 
