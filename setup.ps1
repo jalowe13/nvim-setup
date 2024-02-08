@@ -12,10 +12,8 @@ try {
       $cpuname = (Get-WmiObject Win32_Processor).Name
       Write-Host "Docker is not installed or running. Installing and running."
       Write-Host "After installing Docker, please restart your computer and run the script again."
-      # Install Docker
-      if ($cpuname -match "AMD"){
-        $url = "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"
-        }
+      # Install Docker, other processors later
+       $url = "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"
       Start-BitsTransfer -Source $url -Destination "$PWD\Docker Desktop Installer.exe"  
       Start-Process 'Docker Desktop Installer.exe' -Wait -ArgumentList 'install', '--accept-license'
     }
