@@ -21,5 +21,9 @@ ENV nvimPath="C:\\Users\\ContainerAdministrator\\AppData\\Local\\nvim"
 RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+RUN choco feature enable -n=allowGlobalConfirmation
+RUN choco install neovim -y
+RUN git clone https://github.com/LazyVim/starter $env:nvimPath
 # Run the container 
 CMD ["powershell", "-Command", "while ($true) { Start-Sleep -Seconds 60 }"]

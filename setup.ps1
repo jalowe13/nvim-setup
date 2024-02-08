@@ -42,26 +42,19 @@ if ($dockerContainerOsType -eq "windows") {
 # Build Dockerfile and run Docker container for Neovim and add GIT
 $imageExists = docker images | Where-Object { $_ -match "neovim" }
 if (-not $imageExists) {
-  Write-Host "Neovim image does not exist. Building image."
+  Write-Host "Neovim image does not exist. Building image and recompiling container."
   # Build and run the Docker container for Neovim
-  docker build -t neovim -f Dockerfile .
+  docker build --no-cache -t neovim -f Dockerfile .
+  docker rm -f neovimcontainer
 }  
-  docker rm -f neovimcontainer 
+
   docker run --name neovimcontainer -d neovim
   # Setup process for LazyVim/Neovim through powershell in Docker
   # Hello world would be the first thing to do in the container but represents the setup process
   docker exec -it neovimcontainer powershell -Command { 
-  echo "Starting Neovim Installation with Jacob's LazyVim IDE setup"
-  echo "Installing Dependencies with Chocolatey and Git"
-  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-  RefreshEnv
-  choco feature enable -n=allowGlobalConfirmation
-  echo 'Installing Neovim'
-  choco install neovim -y
-  echo 'Pulling NeoVim from git'
-  git clone https://github.com/LazyVim/starter $env:nvimPath
   echo 'Setting up LazyVim'
   $env:Path += ";$env:nvimPath\bin"
+  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
   RefreshEnv
   nvim
   ; powershell
