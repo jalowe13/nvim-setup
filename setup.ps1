@@ -58,9 +58,8 @@ if (-not $imageExists) {
   docker stop neovimcontainer
 # Copy configuration files
   $CurrentDirectory = Get-Location
-  #docker cp $CurrentDirectory/lua/plugins neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua
-  #docker cp neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua $CurrentDirectory/lua/plugins_env
-  docker cp $CurrentDirectory/lua/plugins_env neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua
+  docker cp $CurrentDirectory/lua/plugins_env/color-schemes.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/color-schemes.lua
+  docker cp $CurrentDirectory/lua/plugins_env/lsp-config.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/lsp-config.lua
   docker start neovimcontainer
   echo "Copying configuration files to container."
 # Execute powershell again
