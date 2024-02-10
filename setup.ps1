@@ -53,12 +53,21 @@ if (-not $imageExists) {
   # Hello world would be the first thing to do in the container but represents the setup process
   docker exec -it neovimcontainer powershell -Command { 
   echo 'Setting up LazyVim'
-  $env:Path += ";$env:nvimPath\bin"
   Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-  RefreshEnv
-  nvim
-  ; powershell
   }
-
+  docker stop neovimcontainer
+# Copy configuration files
+  $CurrentDirectory = Get-Location
+  #docker cp $CurrentDirectory/lua/plugins neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua
+  #docker cp neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua $CurrentDirectory/lua/plugins_env
+  docker cp $CurrentDirectory/lua/plugins_env neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua
+  docker start neovimcontainer
+  echo "Copying configuration files to container."
+# Execute powershell again
+  docker exec -it neovimcontainer powershell -Command {
+    $env:Path += ";C:\\tools\\msys64\\mingw64\\bin"
+    nvim
+    ; powershell
+  }
 
 
