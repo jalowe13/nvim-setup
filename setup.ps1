@@ -46,26 +46,25 @@ if (-not $imageExists) {
   # Build and run the Docker container for Neovim
   docker build --no-cache -t neovim -f Dockerfile .
   docker rm -f neovimcontainer
-}  
-
-  docker run --name neovimcontainer -d neovim
-  # Setup process for LazyVim/Neovim through powershell in Docker
-  # Hello world would be the first thing to do in the container but represents the setup process
-  docker exec -it neovimcontainer powershell -Command { 
-  echo 'Setting up LazyVim'
-  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-  }
+} 
+  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount source=dev,target=C:/dev -d neovim
   docker stop neovimcontainer
-# Copy configuration files
   $CurrentDirectory = Get-Location
   docker cp $CurrentDirectory/lua/plugins_env/color-schemes.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/color-schemes.lua
   docker cp $CurrentDirectory/lua/plugins_env/lsp-config.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/lsp-config.lua
+  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount source=dev,target=C:/dev -d neovim
   docker start neovimcontainer
   echo "Copying configuration files to container."
 # Execute powershell again
   docker exec -it neovimcontainer powershell -Command {
     $env:Path += ";C:\\tools\\msys64\\mingw64\\bin"
-    nvim
+    cd C:\\dev
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "                       Welcome to Jacob's Dev Environment!"
+    echo "                          Enter the editor with 'nvim'"
+    echo "                            Exit with CTRL+P CTRL+Q"
+    echo "Since this is your first time setup please wait for all the plugins in LazyVim to complete"
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     ; powershell
   }
 

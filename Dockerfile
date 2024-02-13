@@ -27,11 +27,13 @@ RUN choco feature enable -n=allowGlobalConfirmation
 # Install Neovim and MSYS2
 RUN choco install neovim -y
 RUN choco install msys2 -y
+RUN choco install make -y
+RUN mkdir dev
 RUN git clone https://github.com/LazyVim/starter $env:nvimPath
 # Update the package database and system packages, and install packages
 # MSYS2 SHELL
 SHELL ["C:\\tools\\msys64\\usr\\bin\\bash.exe", "-lc"]
-RUN 'pacman -Syuu --noconfirm && pacman -Sy --noconfirm make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make mingw-w64-x86_64-SDL2'
+RUN 'pacman -Syuu --noconfirm && pacman -Sy --noconfirm make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL'
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 # Run the container 
 CMD ["powershell", "-Command", "while ($true) { Start-Sleep -Seconds 60 }"]
