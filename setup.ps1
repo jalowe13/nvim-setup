@@ -47,16 +47,17 @@ if (-not $imageExists) {
   docker build --no-cache -t neovim -f Dockerfile .
   docker rm -f neovimcontainer
 } 
-  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount source=dev,target=C:/dev -d neovim
+  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount type=bind,source="C:/Users/jalow/Documents/GitHub",target=C:/dev -d neovim
   docker stop neovimcontainer
   $CurrentDirectory = Get-Location
   docker cp $CurrentDirectory/lua/plugins_env/color-schemes.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/color-schemes.lua
   docker cp $CurrentDirectory/lua/plugins_env/lsp-config.lua neovimcontainer:C:/Users/ContainerAdministrator/AppData/Local/nvim/lua/plugins/lsp-config.lua
-  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount source=dev,target=C:/dev -d neovim
+  docker run --isolation=hyperv --name neovimcontainer -m 5g --cpus=3 --mount type=bind,source="C:/Users/jalow/Documents/GitHub",target=C:/dev -d neovim
   docker start neovimcontainer
   echo "Copying configuration files to container."
 # Execute powershell again
   docker exec -it neovimcontainer powershell -Command {
+    $env:Path += ";C:\\Users\\ContainerAdministrator\\AppData\\Local\\nvim"
     $env:Path += ";C:\\tools\\msys64\\mingw64\\bin"
     cd C:\\dev
     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"

@@ -36,8 +36,8 @@ SHELL ["C:\\tools\\msys64\\usr\\bin\\bash.exe", "-lc"]
 RUN 'pacman -Syuu --noconfirm && pacman -Sy --noconfirm make mingw-w64-x86_64-boost mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-make mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_image mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL'
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 # Install and Ensure Pip is up to date
-RUN python -m ensurepip --upgrade;
-RUN Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile "git-pip.py";
-RUN python .\git-pip.py
+#RUN python -m ensurepip --upgrade;
+#RUN Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile "git-pip.py";
+#RUN python .\git-pip.py
 # Run the container
 CMD ["powershell", "-Command", "while ($true) { Start-Sleep -Seconds 60 }"]
